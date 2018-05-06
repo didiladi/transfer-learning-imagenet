@@ -183,14 +183,19 @@ def download_image_files(labels):
 
                 # We don't allow redirects because flickr could have removed the image in the meanwhile
                 # And we don't want to incluse the deneric 'image not found image' into the training data
-                response = requests.get(url, allow_redirects=False)
 
-                if response.status_code == 200:
-                    with open(file_name, 'wb') as f:
-                        f.write(response.content)
-                else:
+                try:
+                    response = requests.get(url, allow_redirects=False)
+
+                    if response.status_code == 200:
+                        with open(file_name, 'wb') as f:
+                            f.write(response.content)
+                    else:
+                        print("   File: '" + file_name +
+                              "' could not be downloaded, http status code: " + str(response.status_code))
+                except:
                     print("   File: '" + file_name +
-                          "' could not be downloaded, http status code: " + str(response.status_code))
+                          "' could not be downloaded")
 
                 # We want to be good citizens:
                 time.sleep(1)
