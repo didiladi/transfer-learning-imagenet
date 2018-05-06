@@ -144,11 +144,56 @@ def download_image_mapping_files(labels):
 
 
 def download_image_files(labels):
+    """ Downloads the actual image files from the mapping-defined URLs
+
+    The files are stored in './images/<wnid>/<image-id>.<image-file-ending>'
+
+    ATTENTION: Files which were already downloaded before are automatiaclly skipped.
+    """
+
     print("Downloading image files")
 
     for element in labels:
 
         wnid, label = element
+
+        # Create dirs if they don't exist
+        os.makedirs(os.path.dirname('./images/' + wnid + '/'), exist_ok=True)
+
+        mapping_file_name = './mappings/' + wnid + '.txt'
+        label_file = open(mapping_file_name, 'r')
+        lines = label_file.readlines()
+        label_file.close()
+
+        print("   Getting " + str(len(lines)) +
+              " images for class '" + label + "'")
+
+        for line in lines:
+
+            name, url = line.split(' ')
+            file_ending = (url.split(".")[-1]).rstrip('\n')
+            file_name = './images/' + wnid + '/' + name + "." + file_ending
+
+            my_file = Path(file_name)
+
+            # to prevent downloading the same file multiple times:
+            if not my_file.exists():
+
+                print("      " + line.rstrip('\n'))
+
+                # We don't allow redirects because flickr could have removed the image in the meanwhile
+                # And we don't want to incluse the deneric 'image not found image' into the training data
+                response = requests.get(url, allow_redirects=False)
+
+                if response.status_code == 200:
+                    with open(file_name, 'wb') as f:
+                        f.write(response.content)
+                else:
+                    print("   File: '" + file_name +
+                          "' could not be downloaded, http status code: " + str(response.status_code))
+
+                # We want to be good citizens:
+                time.sleep(1)
 
 
 if __name__ == '__main__':
