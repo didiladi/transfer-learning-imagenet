@@ -1,2 +1,6 @@
 .vscode
+
 *.tar.gz
+
+data/Annotation/
+data/mappings/

@@ -5,6 +5,7 @@ import time
 import re
 from urllib.parse import urljoin
 import tarfile
+import os
 
 MAPPING_API = 'http://www.image-net.org/api/text/imagenet.synset.geturls.getmapping?wnid='
 BOUNDING_BOX_API = 'http://www.image-net.org/api/download/imagenet.bbox.synset?wnid='
@@ -51,12 +52,12 @@ def download_bounding_boxes(labels):
     print("Downloading bounding boxes")
 
     file_names = []
+    meta_refresh_regex = re.compile(
+        '<meta[^>]*?url=(.*?)["\']', re.IGNORECASE)
 
     for element in labels:
 
         wnid, label = element
-        meta_refresh_regex = re.compile(
-            '<meta[^>]*?url=(.*?)["\']', re.IGNORECASE)
 
         file_name = './' + wnid + '.tar.gz'
         my_file = Path(file_name)
@@ -104,8 +105,50 @@ def extract_bounding_boxes(downloaded_files):
             tar.close()
 
 
+def download_image_mapping_files(labels):
+    """ Downloads the class mappings from the imagenet website
+
+    The mappings are one file per class which contains the name of the image (used in
+    the bounding boxes) and the URL where to find the image.
+
+    The files are stored in './mappings/<wnid>.txt'
+
+    ATTENTION: Files which were already downloaded before are automatiaclly skipped.
+    """
+
+    print("Downloading image mapping files")
+
+    # Create dirs if they don't exist
+    os.makedirs(os.path.dirname('./mappings/'), exist_ok=True)
+
+    for element in labels:
+
+        wnid, label = element
+        file_name = './mappings/' + wnid + '.txt'
+
+        my_file = Path(file_name)
+
+        # to prevent downloading the same file multiple times:
+        if not my_file.exists():
+
+            response = requests.get(MAPPING_API + wnid)
+
+            print("   Getting mappings for '" + label +
+                  "', http status code: " + str(response.status_code))
+
+            with open(file_name, 'wb') as f:
+                f.write(response.content)
+
+            # We want to be good citizens:
+            time.sleep(5)
+
+
 def download_image_files(labels):
     print("Downloading image files")
+
+    for element in labels:
+
+        wnid, label = element
 
 
 if __name__ == '__main__':
@@ -115,4 +158,5 @@ if __name__ == '__main__':
     downloaded_files = download_bounding_boxes(labels)
     extract_bounding_boxes(downloaded_files)
 
+    download_image_mapping_files(labels)
     download_image_files(labels)
