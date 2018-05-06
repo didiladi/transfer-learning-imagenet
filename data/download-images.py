@@ -170,6 +170,9 @@ def download_image_files(labels):
 
         for line in lines:
 
+            if " " not in line:
+                continue
+
             name, url = line.split(' ')
             file_ending = (url.split(".")[-1]).rstrip('\n')
             file_name = './images/' + wnid + '/' + name + "." + file_ending
