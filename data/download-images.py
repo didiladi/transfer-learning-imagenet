@@ -185,10 +185,11 @@ def download_image_files(labels):
                 print("      " + line.rstrip('\n'))
 
                 # We don't allow redirects because flickr could have removed the image in the meanwhile
-                # And we don't want to incluse the deneric 'image not found image' into the training data
+                # And we don't want to incluse the generic 'image not found image' into the training data
 
                 try:
-                    response = requests.get(url, allow_redirects=False)
+                    response = requests.get(
+                        url, allow_redirects=False, verify=False, timeout=10)
 
                     if response.status_code == 200:
                         with open(file_name, 'wb') as f:
