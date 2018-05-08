@@ -6,35 +6,10 @@ import re
 from urllib.parse import urljoin
 import tarfile
 import os
+from readlabels import *
 
 MAPPING_API = 'http://www.image-net.org/api/text/imagenet.synset.geturls.getmapping?wnid='
 BOUNDING_BOX_API = 'http://www.image-net.org/api/download/imagenet.bbox.synset?wnid='
-
-
-def read_labels(file_name):
-    """ Loads the labels of the imagenet synsets which should be downloaded
-
-    The labels are returned as a matrix with the size [n, 2]
-
-        n is the number of labels
-        2 is for the 2 attributes id (e.g. n07745940) and label name (e.g. strawberry)
-
-    E.g. [['n07745940', 'strawberry'], ['n03947888', 'pirate'], ['n02797295', 'barrow']]
-    """
-
-    print("Reading desired labels")
-
-    label_file = open(file_name, 'r')
-    lines = label_file.readlines()
-    label_file.close()
-
-    result = []
-
-    for line in lines:
-        wnid, _, label = line.split(' ', 2)
-        result.append([wnid, label.rstrip(' \n')])
-
-    return result
 
 
 def download_bounding_boxes(labels):
@@ -158,7 +133,8 @@ def download_image_files(labels):
         wnid, label = element
 
         # Create dirs if they don't exist
-        os.makedirs(os.path.dirname('./images/' + wnid + '/'), exist_ok=True)
+        os.makedirs(os.path.dirname(
+            IMAGE_FOLDER_NAME + wnid + '/'), exist_ok=True)
 
         mapping_file_name = './mappings/' + wnid + '.txt'
         label_file = open(mapping_file_name, 'r')
@@ -175,7 +151,7 @@ def download_image_files(labels):
 
             name, url = line.split(' ')
             file_ending = (url.split(".")[-1]).rstrip('\n')
-            file_name = './images/' + wnid + '/' + name + "." + file_ending
+            file_name = IMAGE_FOLDER_NAME + wnid + '/' + name + "." + file_ending
 
             my_file = Path(file_name)
 
