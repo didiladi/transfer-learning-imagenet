@@ -1,7 +1,7 @@
 
 # Acquiring of training data
 
-Since we want to continue trainign of our yolo weights with a different set of labels, we need to aquire trainign data for these new classes. The new classes are:
+Since I want to continue training of our yolo weights with a different set of labels, I need to aquire training data for these new classes. The new classes from the set of 1000 imagenet classes are:
 
 ```
 n07745940 229 strawberry
@@ -52,13 +52,14 @@ n04409515 970 tennis_ball
 n04254777 986 sock 
 ```
 
-## Downloading the data
+## Downloading the images and bounding boxes
+
+Since I'm too lazy to label all the trainign data myself, I used the pre-labelled imgages which are osed on imagenet. However, since this project is somewhat semi-commercial, I cannot download the images directy from the imagenet website, since it states, that images downloaded from there must only be used for educational purposes. However, luckily they provide a list of URLs where the images originally came from. That's why I wrote a little python script which downloads them from its original source. Together with the bounding box annotations from imagenet, we have our trainign data:
 
 ```
 cd data
 python download-images.py
 ```
-
 
 ## Cleaning the data
 
@@ -66,7 +67,7 @@ Since a lot of servers don't provice a correct http status code response, we dow
 
 For the record: A correct http status code would be 404 (unavailable) or at least a redirect (302) if the image is not available.
 
-The python script ```delete-invalid-images.py``` tries to open each image file within the ```images``` folder. If ofening the image fails, we know that it has an invalid format. Now all the invalid image paths are collected in an array and the program asks for user input whether the images can be deleted.
+The python script ```delete-invalid-images.py``` tries to open each image file within the ```images``` folder. If opening the image fails, we know that it has an invalid format. Now all the invalid image paths are collected in an array and the program asks for user input whether the images can be deleted.
 
 **Attention:** check the output of the script before pressing ```y```. It is strongly recommended to pipe the outpout (std out) of the program additionally into a file and inspect some of the invalid files manually:
 
