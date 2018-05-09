@@ -5,3 +5,5 @@
 data/Annotation/
 data/mappings/
 data/images/
+
+__pycache__/

@@ -28,9 +28,9 @@ def collect_invalid_images(labels):
 
         for file in files:
             try:
-                Image.open(file)
+                Image.open(folder_name + "/" + file)
             except IOError:
-                invalid_image_files.append(file)
+                invalid_image_files.append(folder_name + "/" + file)
 
     return invalid_image_files
 
