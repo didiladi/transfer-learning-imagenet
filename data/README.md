@@ -74,3 +74,57 @@ The python script ```delete-invalid-images.py``` tries to open each image file w
 ```
 python delete-invalid-images.py | tee out.txt
 ```
+
+## Summary
+
+Downloading of the image files took several days on my laptop. It was done gracefully, we only made one request per second. Sadly, approximately 50% of the original images are not avaialable any more. However, we still acquired a lot of training data. The size of all images combined is more than 6GB. The following listing displays the amount of images we downloaded per class:
+
+
+```
+./images/n01514859: 878
+./images/n01608432: 701
+./images/n01855672: 1209
+./images/n02007558: 1246
+./images/n02776631: 1115
+./images/n02797295: 1302
+./images/n02823428: 1391
+./images/n02843684: 1517
+./images/n02909870: 1101
+./images/n02948072: 993
+./images/n02951585: 477
+./images/n03063689: 964
+./images/n03207941: 1333
+./images/n03291819: 806
+./images/n03372029: 1098
+./images/n03481172: 998
+./images/n03544143: 590
+./images/n03594734: 1379
+./images/n03661043: 984
+./images/n03676483: 927
+./images/n03692522: 379
+./images/n03793489: 925
+./images/n03814906: 1092
+./images/n03947888: 419
+./images/n04004767: 1040
+./images/n04033901: 621
+./images/n04081281: 989
+./images/n04152593: 479
+./images/n04204347: 1434
+./images/n04208210: 951
+./images/n04254777: 1773
+./images/n04326547: 1384
+./images/n04356056: 737
+./images/n04398044: 1575
+./images/n04409515: 899
+./images/n04456115: 427
+./images/n04465501: 1573
+./images/n04548362: 1070
+./images/n04584207: 915
+./images/n06596364: 561
+./images/n07716358: 987
+./images/n07745940: 1445
+./images/n07753113: 1246
+./images/n07753275: 1564
+./images/n07873807: 1470
+./images/n13133613: 898
+```
