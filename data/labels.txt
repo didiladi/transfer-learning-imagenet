@@ -1,5 +1,4 @@
 n07745940 229 strawberry
-n03947888 245 pirate
 n02797295 258 barrow
 n04204347 259 shopping_cart
 n04465501 289 tractor
