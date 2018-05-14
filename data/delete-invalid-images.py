@@ -5,6 +5,29 @@ from PIL import Image
 import sys
 
 
+def rename_images_if_necessary(labels):
+    """ Renames images which have a query string (?) in their file names 
+
+    Since our downloading functionality wasn't correctly handing the query string,
+    we need to do some additional post-processing and file renaming.
+
+    """
+
+    for element in labels:
+
+        wnid, _ = element
+        folder_name = IMAGE_FOLDER_NAME + wnid
+
+        files = os.listdir(folder_name)
+
+        for file in files:
+
+            if "?" not in file:
+                continue
+
+            os.rename(folder_name + "/" + file, folder_name + "/" + file)
+
+
 def collect_invalid_images(labels):
     """ Collects all non-valid image files
 
@@ -86,15 +109,18 @@ def delete_invalid_files(invalid_files):
 if __name__ == '__main__':
 
     labels = read_labels('labels.txt')
+    rename_images_if_necessary(labels)
     invalid_image_files = collect_invalid_images(labels)
 
-    print("I'm going to delete the following files:\n")
+    if len(invalid_image_files) > 0:
 
-    for element in invalid_image_files:
-        print(element)
+        print("I'm going to delete the following files:\n")
 
-    print("---------------------------------------------------")
-    doDelete = query_yes_no('Do you really want to delete these files?')
+        for element in invalid_image_files:
+            print(element)
 
-    if doDelete:
-        delete_invalid_files(invalid_image_files)
+        print("---------------------------------------------------")
+        doDelete = query_yes_no('Do you really want to delete these files?')
+
+        if doDelete:
+            delete_invalid_files(invalid_image_files)
