@@ -22,33 +22,29 @@ def collect_image_names(wnid):
     return os.listdir(folder_name)
 
 
-def move_files_to_folder(image_names, src_folder_name, dest_folder_name):
+def move_files_to_folder(image_names, src_image_folder_name, dest_image_folder_name,
+                         src_annotation_folder_name, dest_annotation_folder_name):
     """ Moves image files from one folder to another """
 
     # Create dirs if they don't exist
-    os.makedirs(os.path.dirname(dest_folder_name), exist_ok=True)
-
-    for file in image_names:
-        # print(src_folder_name + file)
-        # print(dest_folder_name + file)
-        os.rename(src_folder_name + file, dest_folder_name + file)
-
-
-def move_annotation_files_to_folder(image_names, src_folder_name, dest_folder_name):
-    """ Moves annotation files from one folder to another """
-
-    # Create dirs if they don't exist
-    os.makedirs(os.path.dirname(dest_folder_name), exist_ok=True)
+    os.makedirs(os.path.dirname(dest_image_folder_name), exist_ok=True)
+    os.makedirs(os.path.dirname(dest_annotation_folder_name), exist_ok=True)
 
     for file in image_names:
 
         image_file_without_extension = file[:file.index(".")]
         annotation_file_name = image_file_without_extension + ".xml"
 
-        # print(src_folder_name + annotation_file_name)
-        # print(dest_folder_name + annotation_file_name)
-        os.rename(src_folder_name + annotation_file_name,
-                  dest_folder_name + annotation_file_name)
+        try:
+
+            os.rename(src_annotation_folder_name + annotation_file_name,
+                      dest_annotation_folder_name + annotation_file_name)
+            os.rename(src_image_folder_name + file,
+                      dest_image_folder_name + file)
+
+        except FileNotFoundError:
+            print("Annotation file " + src_annotation_folder_name +
+                  annotation_file_name + " could not be found, skipping image")
 
 
 if __name__ == '__main__':
@@ -76,24 +72,19 @@ if __name__ == '__main__':
               " to new train/dev/test destinations")
 
         old_image_folder_name = IMAGE_FOLDER_NAME + wnid + "/"
-        folder_postfix = "-" + str(num_batch) + "/"
-
-        # Move the image files:
-        move_files_to_folder(X_train, old_image_folder_name,
-                             NEW_TRAIN_FOLDER_NAME + folder_postfix)
-        move_files_to_folder(X_dev, old_image_folder_name,
-                             NEW_DEV_FOLDER_NAME + folder_postfix)
-        move_files_to_folder(X_test, old_image_folder_name,
-                             NEW_TEST_FOLDER_NAME + folder_postfix)
-
         old_annotation_folder_name = OLD_ANNOTATION_FOLDER_NAME + wnid + "/"
 
-        # Move the annotations:
-        move_annotation_files_to_folder(X_train, old_annotation_folder_name,
-                                        NEW_TRAIN_ANNOTATIONS_FOLDER_NAME + folder_postfix)
-        move_annotation_files_to_folder(X_dev, old_annotation_folder_name,
-                                        NEW_DEV_ANNOTATIONS_FOLDER_NAME + folder_postfix)
-        move_annotation_files_to_folder(X_test, old_annotation_folder_name,
-                                        NEW_TEST_ANNOTATIONS_FOLDER_NAME + folder_postfix)
+        folder_postfix = "-" + str(num_batch) + "/"
+
+        # Move the image and annotation files:
+        move_files_to_folder(X_train,
+                             old_image_folder_name, NEW_TRAIN_FOLDER_NAME + folder_postfix,
+                             old_annotation_folder_name, NEW_TRAIN_ANNOTATIONS_FOLDER_NAME + folder_postfix)
+        move_files_to_folder(X_dev,
+                             old_image_folder_name, NEW_DEV_FOLDER_NAME + folder_postfix,
+                             old_annotation_folder_name, NEW_DEV_ANNOTATIONS_FOLDER_NAME + folder_postfix)
+        move_files_to_folder(X_test,
+                             old_image_folder_name, NEW_TEST_FOLDER_NAME + folder_postfix,
+                             old_annotation_folder_name, NEW_TEST_ANNOTATIONS_FOLDER_NAME + folder_postfix)
 
         i = i + 1
