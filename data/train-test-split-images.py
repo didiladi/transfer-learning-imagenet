@@ -4,9 +4,15 @@ from readlabels import *
 import numpy as np
 from sklearn.model_selection import train_test_split
 
+OLD_ANNOTATION_FOLDER_NAME = './Annotation/'
+
 NEW_TRAIN_FOLDER_NAME = IMAGE_FOLDER_NAME + "train/"
 NEW_DEV_FOLDER_NAME = IMAGE_FOLDER_NAME + "dev/"
 NEW_TEST_FOLDER_NAME = IMAGE_FOLDER_NAME + "test/"
+
+NEW_TRAIN_ANNOTATIONS_FOLDER_NAME = IMAGE_FOLDER_NAME + "train-annotations/"
+NEW_DEV_ANNOTATIONS_FOLDER_NAME = IMAGE_FOLDER_NAME + "dev-annotations/"
+NEW_TEST_ANNOTATIONS_FOLDER_NAME = IMAGE_FOLDER_NAME + "test-annotations/"
 
 
 def collect_image_names(wnid):
@@ -19,8 +25,30 @@ def collect_image_names(wnid):
 def move_files_to_folder(image_names, src_folder_name, dest_folder_name):
     """ Moves image files from one folder to another """
 
+    # Create dirs if they don't exist
+    os.makedirs(os.path.dirname(dest_folder_name), exist_ok=True)
+
     for file in image_names:
-        os.rename(src_folder_name + file, dest_folder_name + file)
+        print(src_folder_name + file)
+        print(dest_folder_name + file)
+        #os.rename(src_folder_name + file, dest_folder_name + file)
+
+
+def move_annotation_files_to_folder(image_names, src_folder_name, dest_folder_name):
+    """ Moves annotation files from one folder to another """
+
+    # Create dirs if they don't exist
+    os.makedirs(os.path.dirname(dest_folder_name), exist_ok=True)
+
+    for file in image_names:
+
+        image_file_without_extension = file[:file.index(".")]
+        annotation_file_name = image_file_without_extension + ".xml"
+
+        print(src_folder_name + annotation_file_name)
+        print(dest_folder_name + annotation_file_name)
+        # os.rename(src_folder_name + annotation_file_name,
+        #          dest_folder_name + annotation_file_name)
 
 
 if __name__ == '__main__':
@@ -40,9 +68,21 @@ if __name__ == '__main__':
         print("Moving files of label " + label +
               " to new train/dev/test destinations")
 
-        old_folder_name = IMAGE_FOLDER_NAME + wnid
+        old_image_folder_name = IMAGE_FOLDER_NAME + wnid + "/"
 
-        # Move the files:
-        move_files_to_folder(X_train, old_folder_name, NEW_TRAIN_FOLDER_NAME)
-        move_files_to_folder(X_dev, old_folder_name, NEW_DEV_FOLDER_NAME)
-        move_files_to_folder(X_test, old_folder_name, NEW_TEST_FOLDER_NAME)
+        # Move the image files:
+        move_files_to_folder(
+            X_train, old_image_folder_name, NEW_TRAIN_FOLDER_NAME)
+        move_files_to_folder(X_dev, old_image_folder_name, NEW_DEV_FOLDER_NAME)
+        move_files_to_folder(X_test, old_image_folder_name,
+                             NEW_TEST_FOLDER_NAME)
+
+        old_annotation_folder_name = OLD_ANNOTATION_FOLDER_NAME + wnid + "/"
+
+        # Move the annotations:
+        move_annotation_files_to_folder(
+            X_train, old_annotation_folder_name, NEW_TRAIN_ANNOTATIONS_FOLDER_NAME)
+        move_annotation_files_to_folder(
+            X_dev, old_annotation_folder_name, NEW_DEV_ANNOTATIONS_FOLDER_NAME)
+        move_annotation_files_to_folder(
+            X_test, old_annotation_folder_name, NEW_TEST_ANNOTATIONS_FOLDER_NAME)
