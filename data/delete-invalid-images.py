@@ -25,7 +25,8 @@ def rename_images_if_necessary(labels):
             if "?" not in file:
                 continue
 
-            os.rename(folder_name + "/" + file, folder_name + "/" + file)
+            os.rename(folder_name + "/" + file, folder_name +
+                      "/" + file[:file.index("?")])
 
 
 def collect_invalid_images(labels):
