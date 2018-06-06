@@ -1,11 +1,10 @@
 
 # Acquiring of training data
 
-Since I want to continue training of our yolo weights with a different set of labels, I need to aquire training data for these new classes. The new classes from the set of 1000 imagenet classes are:
+Since we want to continue training of our yolo weights with a different set of 45 labels, we need to aquire training data for these new classes. The new classes from the set of 1000 imagenet classes are:
 
 ```
 n07745940 229 strawberry
-n03947888 245 pirate
 n02797295 258 barrow
 n04204347 259 shopping_cart
 n04465501 289 tractor
@@ -54,7 +53,7 @@ n04254777 986 sock
 
 ## Downloading the images and bounding boxes
 
-Since I'm too lazy to label all the trainign data myself, I used the pre-labelled imgages which are osed on imagenet. However, since this project is somewhat semi-commercial, I cannot download the images directy from the imagenet website, since it states, that images downloaded from there must only be used for educational purposes. However, luckily they provide a list of URLs where the images originally came from. That's why I wrote a little python script which downloads them from its original source. Together with the bounding box annotations from imagenet, we have our trainign data:
+Since I'm too lazy to label all the trainign data myself, I used the pre-labelled imgages which are osed on imagenet. However, since this project is somewhat semi-commercial, we cannot download the images directy from the imagenet website, since it states, that images downloaded from there must only be used for educational purposes. However, luckily they provide a list of URLs where the images originally came from. That's why I wrote a little python script which downloads them from its original source. Together with the bounding box annotations from imagenet, we have our trainign data:
 
 ```
 cd data
@@ -75,9 +74,9 @@ The python script ```delete-invalid-images.py``` tries to open each image file w
 python delete-invalid-images.py | tee out.txt
 ```
 
-## Summary
+## The downloaded data
 
-Downloading of the image files took several days on my laptop. It was done gracefully, we only made one request per second. Sadly, approximately 50% of the original images are not avaialable any more. However, we still acquired a lot of training data. The size of all images combined is more than 6GB. The following listing displays the amount of images we downloaded per class:
+Downloading of the image files took several days on my laptop. Why didi it take so long? It was done gracefully, we only made one image-request per second. Sadly, approximately 50% of the original images are not avaialable any more. However, we still acquired a lot of training data. The size of all images combined is more than 6GB. The following listing displays the amount of images we downloaded per class:
 
 
 ```
@@ -104,7 +103,6 @@ Downloading of the image files took several days on my laptop. It was done grace
 ./images/n03692522: 379
 ./images/n03793489: 925
 ./images/n03814906: 1092
-./images/n03947888: 419
 ./images/n04004767: 1040
 ./images/n04033901: 621
 ./images/n04081281: 989
@@ -128,3 +126,8 @@ Downloading of the image files took several days on my laptop. It was done grace
 ./images/n07873807: 1470
 ./images/n13133613: 898
 ```
+
+## Preparing the data for training:
+
+Darkflow expects the annotations and images to be in just one folder. That's why we need to get rid of the intermediate class folders (e.g. "n13133613/"). We also need to split the data into a train/test set in order to be able to evaluate how well our new models perform. Since our network architecture is based on tiny yolo, we can't use all the class labels within one model (the original tiny yolo has just 20 VOC classes). That's why we will train 3 different neural nets, each using 15 classes.
+
