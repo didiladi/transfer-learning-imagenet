@@ -1,5 +1,5 @@
 
-# YOLO - Transfer Learning
+# YOLO v2 - Transfer Learning
 
 This repo contains the code for the execise in the course KDDM2 at Graz, University of Technology.
 
@@ -28,15 +28,17 @@ git submodule update
 sudo apt-get install -y build-essential python3-dev libsm6 libxext6 libxrender-dev
 
 cd darkflow
-pip3 install setuptools Cython numpy tensorflow opencv-python
+pip3 install setuptools Cython numpy tensorflow opencv-python pandas
 python3 setup.py build_ext --inplace
 ```
 
 # Data Engineering
 
-Read more about the data downloading, cleaning and preparation in [folder 'data'](https://github.com/didiladi/transfer-learning-imagenet/repo/blob/master/data/README.md).
+Read more about the data downloading, cleaning and preparation in [folder data](https://github.com/didiladi/transfer-learning-imagenet/tree/master/data).
 
 # Train the network yourself
+
+### Download the data
 
 I uploaded the training / dev (validation) / test data for the 3 models into three different zip files which can be obtained at Google Drive:
 
@@ -45,6 +47,13 @@ I uploaded the training / dev (validation) / test data for the 3 models into thr
 [train-3.zip](https://drive.google.com/open?id=1_qc7wO64GZ957plpWoS5f8IWCwXK4Yfd)
 
 **Important:** I don't own the rights to any of these images. If you use them in any way, it is your own responibility to take care of checking/aquiring the rights to use them.
+
+### Run darkflow the first time
+
+
+### Run darkflow and load the last checkpoint
+
+
 
 # Evaluation and Results
 
