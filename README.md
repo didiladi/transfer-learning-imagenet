@@ -1,7 +1,12 @@
 
-# Transfer Learning
+# YOLO - Transfer Learning
 
 This repo contains the code for the execise in the course KDDM2 at Graz, University of Technology.
+
+The task was to use transfer learning to train the tiny yolo nn-architecture (this is a convolutional neural network (CNN)) with a set of own labels. Transfer learning is a technique of using an already pre-trained neural network for a different set of labels. This approach works surprisingly well because the first layers of the neural network detect low-level features, like edges, lines, or shapes, which can be used to detect different objects as well.
+
+The term YOLO stands for "You Only Look Once" and it depicts an algorithm where a fixed set of bounding boxes is used to detect objects. Prior approaches in the field of computer vision required a sliding window which was used on the picture on every possible position. This algorithm had the downside, that it required a lot more computational effort to detect (and localize) objects within an image.
+
 
 
 # Installation & Build
@@ -26,5 +31,21 @@ cd darkflow
 pip3 install setuptools Cython numpy tensorflow opencv-python
 python3 setup.py build_ext --inplace
 ```
+
+# Data Engineering
+
+Read more about the data downloading, cleaning and preparation in [folder 'data'](https://github.com/didiladi/transfer-learning-imagenet/repo/blob/master/data/README.md).
+
+# Train the network yourself
+
+I uploaded the training / dev (validation) / test data for the 3 models into three different zip files which can be obtained at Google Drive:
+
+[train-1.zip](https://drive.google.com/open?id=1dLrnUDBHiVCd6BF71Tb9mn7xSk1NIGFY)
+[train-2.zip](https://drive.google.com/open?id=1dAJj8aKTOIpLCkLQxwj8UesvfLC0nBUl)
+[train-3.zip](https://drive.google.com/open?id=1_qc7wO64GZ957plpWoS5f8IWCwXK4Yfd)
+
+**Important:** I don't own the rights to any of these images. If you use them in any way, it is your own responibility to take care of checking/aquiring the rights to use them.
+
+# Evaluation and Results
 
 
