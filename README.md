@@ -63,5 +63,18 @@ If you want to run the training in the cloud (I would highly recommend this opti
 crontab -e
 
 # Add the following line to the file to run the evaluation script every 15 minutes:
-*/15 * * * * cd /root/transfer-learning-imagenet/darkflow && python3.6 eval.py
+*/15 * * * * cd <path>/transfer-learning-imagenet/darkflow && python3.6 eval.py
+```
+
+As soon as you are satisfied with the results, run the following command to turn the checkpoint fie into a deployable .pb file:
+
+```
+flow --model cfg/yolo-new.cfg --load -1 --savepb
+```
+
+Now the model (```.meta```, and ```.pb``` file) ends up in folder ```darkflow/built-graph/```. You can download it from your remote server by using ```scp```:
+
+```
+scp user@server:<path>/transfer-learning-imagenet/darkflow/built_graph/tiny-yolo-voc-v2-1.pb destination-folder/
+scp user@server:<path>/transfer-learning-imagenet/darkflow/built_graph/tiny-yolo-voc-v2-1.meta destination-folder/
 ```
