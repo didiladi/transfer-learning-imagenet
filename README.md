@@ -57,4 +57,11 @@ I uploaded the training / dev (validation) / test data for the 3 models into thr
 
 # Evaluation and Results
 
+If you want to run the training in the cloud (I would highly recommend this option), you can add a cronjob for the evaluation script:
 
+```
+crontab -e
+
+# Add the following line to the file to run the evaluation script every 15 minutes:
+*/15 * * * * cd /root/transfer-learning-imagenet/darkflow && python3.6 eval.py
+```
