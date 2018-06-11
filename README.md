@@ -43,19 +43,26 @@ Read more about the data downloading, cleaning and preparation in [folder data](
 I uploaded the training / dev (validation) / test data for the 3 models into three different zip files which can be obtained at Google Drive:
 
 [train-1.zip](https://drive.google.com/open?id=1dLrnUDBHiVCd6BF71Tb9mn7xSk1NIGFY)
+
 [train-2.zip](https://drive.google.com/open?id=1dAJj8aKTOIpLCkLQxwj8UesvfLC0nBUl)
+
 [train-3.zip](https://drive.google.com/open?id=1_qc7wO64GZ957plpWoS5f8IWCwXK4Yfd)
 
 **Important:** I don't own the rights to any of these images. If you use them in any way, it is your own responibility to take care of checking/aquiring the rights to use them.
 
 ### Run darkflow the first time
 
+```
+./flow --model cfg/<model-filename>.cfg --train --dataset <train-data-folder> --annotation <train-data-annotation-folder> --load ../weights/tiny-yolo-voc.weights
+```
 
 ### Run darkflow and load the last checkpoint
 
+```
+./flow --model cfg/<model-filename>.cfg --train --dataset <train-data-folder> --annotation <train-data-annotation-folder> --load -1
+```
 
-
-# Evaluation and Results
+# Train on a remote server
 
 If you want to run the training in the cloud (I would highly recommend this option), you can add a cronjob for the evaluation script:
 
@@ -69,12 +76,16 @@ crontab -e
 As soon as you are satisfied with the results, run the following command to turn the checkpoint fie into a deployable .pb file:
 
 ```
-flow --model cfg/yolo-new.cfg --load -1 --savepb
+flow --model cfg/<model-filename>.cfg --load -1 --savepb
 ```
 
 Now the model (```.meta```, and ```.pb``` file) ends up in folder ```darkflow/built-graph/```. You can download it from your remote server by using ```scp```:
 
 ```
-scp user@server:<path>/transfer-learning-imagenet/darkflow/built_graph/tiny-yolo-voc-v2-1.pb destination-folder/
-scp user@server:<path>/transfer-learning-imagenet/darkflow/built_graph/tiny-yolo-voc-v2-1.meta destination-folder/
+scp user@server:<path>/transfer-learning-imagenet/darkflow/built_graph/<model-filename>.pb destination-folder/
+scp user@server:<path>/transfer-learning-imagenet/darkflow/built_graph/<model-filename>.meta destination-folder/
 ```
+
+# Evaluation and Results
+
+
