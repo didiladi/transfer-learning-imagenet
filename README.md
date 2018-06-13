@@ -5,8 +5,34 @@ This repo contains the code for the execise in the course KDDM2 at Graz, Univers
 
 The task was to use transfer learning to train the tiny yolo nn-architecture (this is a convolutional neural network (CNN)) with a set of own labels. Transfer learning is a technique of using an already pre-trained neural network for a different set of labels. This approach works surprisingly well because the first layers of the neural network detect low-level features, like edges, lines, or shapes, which can be used to detect different objects as well.
 
+## YOLO
+
 The term YOLO stands for "You Only Look Once" and it depicts an algorithm where a fixed set of bounding boxes is used to detect objects. Prior approaches in the field of computer vision required a sliding window which was used on the picture on every possible position. This algorithm had the downside, that it required a lot more computational effort to detect (and localize) objects within an image.
 
+**TODO more about YOLO**
+
+## Purpose of this project
+
+
+# Aproach
+
+## Data Engineering
+
+Aquiring the necessary training data was definitely the hardest part of this project. It required several iterations, until the acquired data could be used for training the neural network. Read more about the data downloading, cleaning and preparation in [data](https://github.com/didiladi/transfer-learning-imagenet/tree/master/data).
+
+## Training
+
+For training the neural network, the open source project [darkflow]() was used. It ports the original YOLO implementation []() to Tensorflow and was included wihin this repo as a git submodule. The included fork of darkmodule is located [here]().
+
+Darkflow was modified to give some more error information in case it encounters an invalid image file. Additionally, there was some code added to handle the fact the the original imagenet annotation data does not contain file extensions. Now it correctly handles this special case.
+
+Training was performed on the cloud on a machine with just CPUs. GPUs would have been nice, but time was not a limiting factor for me. So it didn't really matter that it took quite a long time to produce the needed machine learnign models.
+
+## Evaluation
+
+
+
+## Results
 
 
 # Installation & Build
@@ -28,13 +54,10 @@ git submodule update
 sudo apt-get install -y build-essential python3-dev libsm6 libxext6 libxrender-dev
 
 cd darkflow
-pip3 install setuptools Cython numpy tensorflow opencv-python pandas
+pip3 install setuptools Cython numpy tensorflow opencv-python pandas psutil
 python3 setup.py build_ext --inplace
 ```
 
-# Data Engineering
-
-Read more about the data downloading, cleaning and preparation in [folder data](https://github.com/didiladi/transfer-learning-imagenet/tree/master/data).
 
 # Train the network yourself
 
@@ -53,13 +76,13 @@ I uploaded the training / dev (validation) / test data for the 3 models into thr
 ### Run darkflow the first time
 
 ```
-./flow --model cfg/<model-filename>.cfg --train --dataset <train-data-folder> --annotation <train-data-annotation-folder> --load ../weights/tiny-yolo-voc.weights
+./flow --model cfg/<model-filename>.cfg --train --dataset <train-data-folder> --annotation <train-data-annotation-folder> --load ../weights/tiny-yolo-voc.weights --labels <path-to-labels-file>
 ```
 
 ### Run darkflow and load the last checkpoint
 
 ```
-./flow --model cfg/<model-filename>.cfg --train --dataset <train-data-folder> --annotation <train-data-annotation-folder> --load -1
+./flow --model cfg/<model-filename>.cfg --train --dataset <train-data-folder> --annotation <train-data-annotation-folder> --load -1 --labels <path-to-labels-file>
 ```
 
 # Train on a remote server
@@ -82,10 +105,7 @@ flow --model cfg/<model-filename>.cfg --load -1 --savepb
 Now the model (```.meta```, and ```.pb``` file) ends up in folder ```darkflow/built-graph/```. You can download it from your remote server by using ```scp```:
 
 ```
-scp user@server:<path>/transfer-learning-imagenet/darkflow/built_graph/<model-filename>.pb destination-folder/
-scp user@server:<path>/transfer-learning-imagenet/darkflow/built_graph/<model-filename>.meta destination-folder/
+scp <user>@<server>:<path>/transfer-learning-imagenet/darkflow/built_graph/<model-filename>.pb <destination-folder>
+scp <user>@<server>:<path>/transfer-learning-imagenet/darkflow/built_graph/<model-filename>.meta <destination-folder>
 ```
-
-# Evaluation and Results
-
 
