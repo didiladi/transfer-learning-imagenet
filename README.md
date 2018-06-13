@@ -62,7 +62,6 @@ pip3 install setuptools Cython numpy tensorflow opencv-python pandas psutil
 python3 setup.py build_ext --inplace
 ```
 
-
 # Train the network yourself
 
 ### Download the data
