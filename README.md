@@ -22,15 +22,19 @@ Aquiring the necessary training data was definitely the hardest part of this pro
 
 ## Training
 
-For training the neural network, the open source project [darkflow]() was used. It ports the original YOLO implementation []() to Tensorflow and was included wihin this repo as a git submodule. The included fork of darkmodule is located [here]().
+For training the neural network, the open source project [darkflow]() was used. It ports the original YOLO implementation [darknet]() to Tensorflow and was included wihin this repo as a git submodule. The included fork of darkmodule is located [here]().
 
-Darkflow was modified to give some more error information in case it encounters an invalid image file. Additionally, there was some code added to handle the fact the the original imagenet annotation data does not contain file extensions. Now it correctly handles this special case.
+Darkflow was modified to give some more error information in case it encounters an invalid image file. Additionally, there was some code added to handle the fact that the original imagenet annotation data does not contain file extensions. Now it correctly handles this special case.
 
 Training was performed on the cloud on a machine with just CPUs. GPUs would have been nice, but time was not a limiting factor for me. So it didn't really matter that it took quite a long time to produce the needed machine learnign models.
 
 ## Evaluation
 
+As explained within the data engineering section, the script [train-test-split-images.py]() was used to divide data into 80% training data, 10% dev (validation) data, and  10% test data. The dev data was used to evaluate the hyperparameters and to decide on how to split the labels for training (how many models). After this phase was finished, the dev (validation) set was added to the training data in order to maximize the amount of used training data.
 
+Training with darkflow automatically produces checkpoint files from time to time. The script [eval.py] was used for evaluating these checkpoints in an automated fashion. For each ckeckpoint it took all the test data and performed a prediction with the given model for each image. It then produced a score between 0 and 1 to depict the overall accuracy. 0 means that the object never appeared within the test data of the given label, 1 means that the abject was always correcty located within the test data.
+
+During training it became quite obvious, that there are several objects which are harder to detect than others. E.g. a strawberry can be detected quite easily, whereas a barrow can be considered as hard to detect. The following image depicts the accuracy of the first five labels (strawberry, barrow, shopping cat, tractor, and fig):
 
 ## Results
 
