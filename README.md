@@ -11,10 +11,16 @@ The term YOLO stands for "You Only Look Once" and it depicts an algorithm where 
 
 **TODO more about YOLO**
 
+Technically speaking, it performs a single forward propagation pass through the neural network to get the required bounding boxes. After that, the algorithm non-max supression is used to filter out unnecessary bounding boxes. Now only the 
+
+
 ## Purpose of this project
 
+The results (obtained models) of this project will be used for a smartphone game which contains a game element, where the user is required to take a photo of certain objects from time to time. If this action is performed, a machine learning server analyzes the photo if it contains the required object and localizes it. I'm plannign to release the game by the end of the year.
 
 # Aproach
+
+The taken aproach can be divided into the categories data engineering, training, and evaluation and required several iterations within each of the categories:
 
 ## Data Engineering
 
@@ -22,7 +28,7 @@ Aquiring the necessary training data was definitely the hardest part of this pro
 
 ## Training
 
-For training the neural network, the open source project [darkflow]() was used. It ports the original YOLO implementation [darknet]() to Tensorflow and was included wihin this repo as a git submodule. The included fork of darkmodule is located [here]().
+For training the neural network, the open source project [darkflow](https://github.com/thtrieu/darkflow) was used. It ports the original YOLO implementation [darknet](https://github.com/pjreddie/darknet) to Tensorflow and was included wihin this repo as a git submodule. The included fork of darkmodule is located [here](https://github.com/didiladi/darkflow).
 
 Darkflow was modified to give some more error information in case it encounters an invalid image file. Additionally, there was some code added to handle the fact that the original imagenet annotation data does not contain file extensions. Now it correctly handles this special case.
 
@@ -30,13 +36,30 @@ Training was performed on the cloud on a machine with just CPUs. GPUs would have
 
 ## Evaluation
 
-As explained within the data engineering section, the script [train-test-split-images.py]() was used to divide data into 80% training data, 10% dev (validation) data, and  10% test data. The dev data was used to evaluate the hyperparameters and to decide on how to split the labels for training (how many models). After this phase was finished, the dev (validation) set was added to the training data in order to maximize the amount of used training data.
+As explained within the data engineering section, the script [train-test-split-images.py](https://github.com/didiladi/transfer-learning-imagenet/blob/master/data/train-test-split-images.py) was used to divide data into 80% training data, 10% dev (validation) data, and  10% test data. The dev data was used to evaluate the hyperparameters and to decide on how to split the labels for training (how many models). After this phase was finished, the dev (validation) set was added to the training data in order to maximize the amount of used training data.
 
-Training with darkflow automatically produces checkpoint files from time to time. The script [eval.py] was used for evaluating these checkpoints in an automated fashion. For each ckeckpoint it took all the test data and performed a prediction with the given model for each image. It then produced a score between 0 and 1 to depict the overall accuracy. 0 means that the object never appeared within the test data of the given label, 1 means that the abject was always correcty located within the test data.
+Training with darkflow automatically produces checkpoint files from time to time. The script [eval.py](https://github.com/didiladi/darkflow/blob/master/eval.py) was used for evaluating these checkpoints in an automated fashion. For each ckeckpoint it took all the test data and performed a prediction with the given model for each image. It then produced a score between 0 and 1 to depict the overall accuracy. 0 means that the object never appeared within the test data of the given label, 1 means that the abject was always correcty located within the test data. Additionally the evaluation script calculated precision, recall and F1 score.
 
-During training it became quite obvious, that there are several objects which are harder to detect than others. E.g. a strawberry can be detected quite easily, whereas a barrow can be considered as hard to detect. The following image depicts the accuracy of the first five labels (strawberry, barrow, shopping cat, tractor, and fig):
+During training it became quite obvious, that there are several objects which are harder to detect than others. E.g. a strawberry can be detected quite easily, whereas a barrow can be considered as hard to detect.
 
 ## Results
+
+The following images depict the accuracy, precision, recall, and F1 score of the first five labels (strawberry, barrow, shopping cat, tractor, and fig) of the first machine learning model:
+
+### Accuracy
+
+
+
+### Precision
+
+
+
+### Recall
+
+
+
+### F1 Score
+
 
 
 # Installation & Build
@@ -86,6 +109,12 @@ I uploaded the training / dev (validation) / test data for the 3 models into thr
 
 ```
 ./flow --model cfg/<model-filename>.cfg --train --dataset <train-data-folder> --annotation <train-data-annotation-folder> --load -1 --labels <path-to-labels-file>
+```
+
+### Run darkflow and load a specific checkpoint
+
+```
+./flow --model cfg/<model-filename>.cfg --train --dataset <train-data-folder> --annotation <train-data-annotation-folder> --load <checkpoint-number> --labels <path-to-labels-file>
 ```
 
 # Train on a remote server
