@@ -31,7 +31,7 @@ For training the neural network, the open source project [darkflow](https://gith
 
 Darkflow was modified to give some more error information in case it encounters an invalid image file. Additionally, there was some code added to handle the fact that the original imagenet annotation data does not contain file extensions. Now it correctly handles this special case.
 
-Training was performed on the cloud on a machine with just CPUs. GPUs would have been nice, but time was not a limiting factor for me. So it didn't really matter that it took quite a long time to produce the needed machine learnign models.
+Training was performed on the cloud on a machine with just CPUs. GPUs would have been nice, but time was not a limiting factor for me. So it didn't really matter that it took quite a long time to produce the needed machine learning models.
 
 ## Evaluation
 
