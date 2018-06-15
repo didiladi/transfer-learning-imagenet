@@ -47,17 +47,25 @@ The following images depict the accuracy, precision, recall, and F1 score of the
 
 ### Accuracy
 
+Accuracy seems to be a promising metric for determining if the training worked. It is easy to see whether the model can be considered as good enough. One can clearly see when overfitting starts. That's the point when accuracy on the test set starts decreasing again:
+
 ![Accuracy](https://github.com/didiladi/transfer-learning-imagenet/blob/master/tiny-yolo-v2-1-accuracy.png "Accuracy of model 1")
 
 ### Precision
+
+This metric is not very useful for the given task. This is due to the reason that we divide divide the number of true positives by the number of true positives plus the number of false positives (tp/(tp+fp)). Since we hardy have any false positives, the resulting precision is always close to 1:
 
 ![Precision](https://github.com/didiladi/transfer-learning-imagenet/blob/master/tiny-yolo-v2-1-precision.png "Precision of model 1")
 
 ### Recall
 
+Recall seems to be a good metric for determining the overall model quality. Since the CNN often misses to detect a certain object, despite the fact that it is present within the image, this increases the number of false positives, which loweres the recall:
+
 ![Recall](https://github.com/didiladi/transfer-learning-imagenet/blob/master/tiny-yolo-v2-1-recall.png "Recall of model 1")
 
 ### F1 Score
+
+This metric combines precision and recall and provides a good vieo on the resulting models:
 
 ![F1 Score](https://github.com/didiladi/transfer-learning-imagenet/blob/master/tiny-yolo-v2-1-f1.png "F1 score of model 1")
 
