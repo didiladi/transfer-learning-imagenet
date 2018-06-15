@@ -48,19 +48,19 @@ The following images depict the accuracy, precision, recall, and F1 score of the
 
 ### Accuracy
 
-
+![Accuracy](https://github.com/didiladi/transfer-learning-imagenet/blob/master/tiny-yolo-v2-1-accuracy.png "Accuracy of model 1")
 
 ### Precision
 
-
+![Precision](https://github.com/didiladi/transfer-learning-imagenet/blob/master/tiny-yolo-v2-1-precision.png "Precision of model 1")
 
 ### Recall
 
-
+![Recall](https://github.com/didiladi/transfer-learning-imagenet/blob/master/tiny-yolo-v2-1-recall.png "Recall of model 1")
 
 ### F1 Score
 
-
+![F1 Score](https://github.com/didiladi/transfer-learning-imagenet/blob/master/tiny-yolo-v2-1-f1.png "F1 score of model 1")
 
 # Installation & Build
 
