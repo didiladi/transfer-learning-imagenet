@@ -126,6 +126,9 @@ crontab -e
 
 # Add the following line to the file to run the evaluation script every 15 minutes:
 */15 * * * * cd <path>/transfer-learning-imagenet/darkflow && python3.6 eval.py
+
+# It also makes sense to save all the checkpoints because darkflow cleans them up:
+*/15 * * * * cd <path>/transfer-learning-imagenet/darkflow && cp -u cfg/<cfg-name>-* .
 ```
 
 As soon as you are satisfied with the results, run the following command to turn the checkpoint fie into a deployable .pb file:
@@ -137,7 +140,6 @@ flow --model cfg/<model-filename>.cfg --load -1 --savepb
 Now the model (```.meta```, and ```.pb``` file) ends up in folder ```darkflow/built-graph/```. You can download it from your remote server by using ```scp```:
 
 ```
-scp <user>@<server>:<path>/transfer-learning-imagenet/darkflow/built_graph/<model-filename>.pb <destination-folder>
-scp <user>@<server>:<path>/transfer-learning-imagenet/darkflow/built_graph/<model-filename>.meta <destination-folder>
+scp <user>@<server>:<path>/transfer-learning-imagenet/darkflow/built_graph/<model-filename>.* <destination-folder>
 ```
 
